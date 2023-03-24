@@ -1,0 +1,810 @@
+<html>
+<head>
+<title>Project 1 -- multi-threaded programming</title>
+</head>
+<body>
+<div id="primer-spec-plugin-main-content">
+<h1>Project 1 -- multi-threaded programming</h1>
+<!-- Worth: 3 points<br> -->
+Assigned: September 14, 2022<br>
+Due: September 27, 2022
+
+<h2 id="overview">1. Overview</h2>
+
+<p>
+This project will give you experience writing multi-threaded programs
+using monitors: mutexes and condition variables.  In this project, you
+will write a simple concurrent program that schedules disk requests.
+Your concurrent program will use a thread library that we provide.
+
+<p>
+<strong><font color="#FF0000">This project is to be done
+individually.</font></strong>
+
+<h2>2. Thread library interface</h2>
+
+<p>
+This section describes the interface that the thread library provides
+to applications.  The interface consists of five
+classes: <tt>cpu</tt>, <tt>thread</tt>, <tt>mutex</tt>, <tt>cv</tt>,
+and
+<tt>semaphore</tt>, which are declared in <a href=cpu.h><tt>cpu.h</tt></a>,
+<a href=thread.h><tt>thread.h</tt></a>, <a
+href=mutex.h><tt>mutex.h</tt></a>, <a href=cv.h><tt>cv.h</tt></a>, and <a
+href=semaphore.h><tt>semaphore.h</tt></a> (do not modify these files).  For
+convenience, <a href=thread.h><tt>thread.h</tt></a> includes the other
+header files.
+
+<p>
+To use the thread library, <tt>#include <a href=thread.h>thread.h</a></tt>
+and link with <a href=libthread.o><tt>libthread.o</tt></a>.
+
+<h3>2.1. <tt>cpu</tt> class</h3>
+
+<p>
+The <tt>cpu</tt> class is declared in <a href=cpu.h><tt>cpu.h</tt></a> and
+is used mainly by the thread library.  The only part used by applications
+is the <tt>cpu::boot</tt> function:
+
+<pre>
+    static void boot(thread_startfunc_t func, void *arg, unsigned int deterministic);
+</pre>
+
+<p>
+<tt>cpu::boot</tt> starts the thread library and creates the initial
+thread. The thread library embodies this first thread by invoking the
+function pointed to by <tt>func</tt>, passing the single
+argument <tt>arg</tt>.  A user program should call <tt>cpu::boot</tt>
+exactly once, before calling any other thread
+functions.  <tt>cpu::boot</tt> does not return.
+
+<p>
+<tt>deterministic</tt> specifies if the thread library should be
+deterministic or not.  Setting <tt>deterministic</tt> to zero makes
+the scheduling of threads non-deterministic, i.e., different runs may
+generate different results.  Setting <tt>deterministic</tt> to a
+non-zero value forces the scheduling of threads to be deterministic,
+i.e., a program will generate the same results if it is run with the
+same value for <tt>deterministic</tt> Different non-zero values
+for <tt>deterministic</tt> will lead to different results; this can be
+helpful when debugging.
+
+<p>
+Note that <tt>cpu::boot</tt> is a <tt>static</tt> member function and
+is not invoked on an instance of the <tt>cpu</tt> class. See the
+example program below for the proper syntax.
+
+<h3>2.2. <tt>thread</tt> class</h3>
+
+<p>
+The <tt>thread</tt> class is declared in
+<a href=thread.h><tt>thread.h</tt></a>.
+
+<p>
+The constructor creates a new thread.  The thread library causes this
+new thread to begin execution by invoking the function
+pointed to by <tt>func</tt>, passing it the single
+argument <tt>arg</tt>.
+
+<pre>
+    thread(thread_startfunc_t func, void *arg);
+</pre>
+
+<p>
+The <tt>join</tt> method causes the calling thread to block until the
+thread denoted by the method's object has exited.  If the specified
+thread has already exited, <tt>join</tt> returns immediately.
+
+<pre>
+    void join();
+</pre>
+
+<h3>2.3. <tt>mutex</tt> class</h3>
+
+<p>
+The <tt>mutex</tt> class is declared in
+<a href=mutex.h><tt>mutex.h</tt></a>.
+
+<p>
+The constructor is used to create a new mutex. Recall that mutexes are
+free at the time of instantiation.
+
+<pre>
+    mutex();
+</pre>
+
+<p>
+<tt>lock</tt> atomically waits for the mutex to be free and acquires
+it for the current thread. If multiple threads are contending for a
+mutex, the thread library ensures that only one will acquire it at a
+time. You may not assume anything about the order in which contending
+threads acquire the mutex. 
+
+<pre>
+    void lock();
+</pre>
+
+<p>
+<tt>unlock</tt> releases the mutex.  Throws <tt>std::runtime_error</tt>
+exception if the invoking thread does not hold the mutex.
+
+<pre>
+    void unlock();
+</pre>
+
+<h3>2.4. <tt>cv</tt> class</h3>
+
+<p>
+The <tt>cv</tt> class is declared in <a href=cv.h><tt>cv.h</tt></a>.
+
+<p>
+The constructor is used to create a new condition variable.
+
+<pre>
+    cv();
+</pre>
+
+<p>
+<tt>wait</tt> atomically releases mutex <tt>m</tt> and waits on the
+condition variable's wait queue.  When the thread is awakened, 
+<tt>wait</tt> will attempt to re-acquire <tt>m</tt> as if by
+callling <tt>lock</tt>; when it does so successfullly, wait returns
+to the calling thread  with the mutex held.  Throws
+<tt>std::runtime_error</tt> exception if thread does not hold the
+mutex <tt>m</tt> on invocation. Note that threads may
+awaken <i>spuriously</i>, without a corresponding call to signal or
+broadcast, and you can make no assumptions about the time between a
+thread awakening and attempting to re-acquire the mutex <tt>m</tt>.
+
+
+<pre>
+    void wait(mutex& m);
+</pre>
+
+<p>
+<tt>signal</tt> awakens one of the threads on the condition queue. If
+multiple threads are waiting, you may not assume anything about the
+order in which signal awakens threads.
+
+<pre>
+    void signal();
+</pre>
+
+<p>
+<tt>broadcast</tt> awakens all of the threads on the condition
+queue. If multiple threads are waiting, you may not assume anything
+about the order in which awoken threads are scheduled.
+
+<pre>
+    void broadcast();
+</pre>
+
+<h3>2.5. <tt>semaphore</tt> class</h3>
+
+This class is provided so you can try programming with semaphores in
+lab or on your own.  Use locks and condition variables (not
+semaphores) for Project 1.
+
+<p>
+The <tt>semaphore</tt> class is declared in
+<a href=semaphore.h><tt>semaphore.h</tt></a>.
+
+<p>
+The constructor is used to create a new semaphore and initialize it to
+the specified value.
+
+<pre>
+    semaphore(unsigned int initial_value);
+</pre>
+
+<p>
+<tt>down</tt> atomically waits for the semaphore to be positive and
+decrements it.
+
+<pre>
+    void down();
+</pre>
+
+<p>
+<tt>up</tt> atomically increments the semaphore.
+
+<pre>
+    void up();
+</pre>
+
+<h3>2.6. Scheduling and Termination</h3>
+
+<p>
+When a thread is eligible for execution, we say that the thread
+is <strong>ready</strong>. When more than one thread is ready, the thread
+library makes no guarantees about which ones will be selected to run
+or what their relative rates of progress will be.
+
+<p>
+When a thread is waiting in one of <tt>join</tt>, <tt>lock</tt>,
+<tt>wait</tt>, or <tt>down</tt> we say the thread
+is <strong>blocked</strong>. Blocked threads do not consume CPU. When
+a thread becomes blocked, another ready thread is selected to run if
+any such threads exist. If no ready threads exist, the thread library
+exits and your program terminates.
+
+<p>
+When more than one thread is waiting to acquire a lock, you may not
+make any assuptions about (a) which thread will be woken up to attempt
+to acquire the lock in response to a call to <tt>unlock</tt> or (b)
+how much time elapses between being woken up and making that
+attempt. In particular, a thread that is not waiting for the lock at
+the time of <tt>unlock</tt> may acquire it before any waiting threads
+do.
+
+<p>
+When more than one thread is waiting on a condition variable, you may
+not make any assumptions about (a) which thread will be woken up in
+response to a call to <tt>signal</tt> or (b) how much time elapses
+between being woken up and attempting to re-acquire the
+lock. Likewise, you may not assume the order in which a set of waiting
+threads will be scheduled in response to a call to <tt>broadcast</tt>.
+
+<p>
+When more than one thread is waiting in a call to <tt>down</tt>, you
+may not make any assumptions about which thread will be woken up in
+response to a call to <tt>up</tt>.
+
+
+<h3 id="example">2.7. Example program</h3>
+
+<p>
+Here is a short program that uses threads.
+
+<hr>
+<pre>
+#include &lt;iostream&gt;
+#include "thread.h"
+
+using std::cout;
+using std::endl;
+
+mutex mutex1;
+cv cv1;
+
+int child_done = 0;		// global variable; shared between the two threads
+
+void child(void *a)
+{
+    char *message = (char *) a;
+    mutex1.lock();
+    cout << "child called with message " << message << ", setting child_done = 1" << endl;
+    child_done = 1;
+    cv1.signal();
+    mutex1.unlock();
+}
+
+void parent(void *a)
+{
+    intptr_t arg = (intptr_t) a;
+    mutex1.lock();
+    cout << "parent called with arg " << arg << endl;
+    mutex1.unlock();
+
+    thread t1 ((thread_startfunc_t) child, (void *) "test message");
+
+    mutex1.lock();
+    while (!child_done) {
+        cout << "parent waiting for child to run\n";
+        cv1.wait(mutex1);
+    }
+    cout << "parent finishing" << endl;
+    mutex1.unlock();
+}
+
+int main()
+{
+    cpu::boot((thread_startfunc_t) parent, (void *) 100, 0);
+}
+</pre>
+
+<hr>
+
+<p>
+Here are the <strong>two</strong> possible outputs the program can generate.
+
+<hr>
+
+<pre>
+parent called with arg 100
+parent waiting for child to run
+child called with message test message, setting child_done = 1
+parent finishing
+No runnable threads.  Exiting.
+<hr>
+parent called with arg 100
+child called with message test message, setting child_done = 1
+parent finishing
+No runnable threads.  Exiting.
+</pre>
+<hr>
+
+<h2 id="diskscheduler">3. Disk scheduler</h2>
+
+<p>
+Your task for this project is to write a concurrent program that
+issues and services disk requests.  Use monitors (mutexes and
+condition variables) for synchronization; do not use semaphores.
+
+<p>
+The disk scheduler in an operating system receives and schedules
+requests for disk I/Os.  Threads issue disk requests by enqueueing
+them at the disk scheduler and waiting for them to be serviced.  The
+disk scheduler queue can contain at most a finite number of requests
+(<tt>max_disk_queue</tt>); this limit is passed as a command line
+argument to your program. Threads wishing to make requests must wait
+if the queue is full.
+
+<p>
+Your program will create of a set of threads: one <strong>servicer</strong>
+thread and a number of <strong>requester</strong> threads. The number of
+requester threads will be inferred from the command line arguments.
+Each requester thread should issue a series of requests for disk
+tracks; these are specified in an input file. The names of these files
+are passed as arguments to your program.  Each request
+is <strong>synchronous</strong>; a requester thread must wait until
+the servicing thread finishes handling that requester's current request
+before that requester issues its next request.  A requester thread
+finishes after all the requests in its input file have been serviced.
+
+<p>
+Requests in the disk queue are <strong>not</strong> necessarily
+serviced in first-come, first-served order.  Instead, the service
+thread handles disk requests in <strong>shortest seek time first</strong>
+(SSTF) order.  That is, the next request it services is the request
+that is closest to its current track.  The disk is initialized with
+its current track as 0.
+
+<p>
+Keep the disk queue as full as possible; your service thread should only
+handle a request when the disk queue has the largest possible number of
+requests.  This gives the service thread the largest number of requests to
+choose from, which in turn helps minimize average seek distance.  Note that
+the value of "the largest possible number of requests" varies depending on
+how many requester threads are still active.  When at least
+<tt>max_disk_queue</tt> requester threads are active, the largest possible
+number of requests in the queue is equal to <tt>max_disk_queue</tt>.  When
+fewer than <tt>max_disk_queue</tt> requester threads are active, the largest
+number of requests in the queue is equal to the number of living requester
+threads.  A requester is considered to be active from the time the program
+starts until all its requests have been serviced.
+
+<p>
+<!--
+Over reasonable time intervals (say, enough time for each requester
+to issue several requests), your program should be unbiased in which
+requester gets to issue a request when there is space on the disk queue.
+-->
+Your program should not force a particular order on which requester should
+get to issue a request when there is space in the disk queue; this should
+depend solely on the speed of the threads and the scheduling of mutexes
+and condition variables.
+
+<h3 id="input">3.1. Input</h3>
+
+<p>
+Your program will be called with several command-line arguments.  The first
+argument specifies the maximum number of requests that the disk queue can
+hold.  The rest of the arguments specify a list of input files (one input file
+per requester).  I.e., the input file for requester r is argv[r+2], where
+0 <= r < (number of requesters).  The number of threads making disk requests
+can be inferred from the number of input files specified. 
+
+<p>
+The input file for each requester contains that requester's series of requests.
+Each line of the input file specifies the track number of the request (0 to
+999).  You may assume that input files are formatted correctly.
+
+<h3 id="output">3.2. Output</h3>
+
+<p>
+In the critical section where a requester thread issues a request for a
+particular <tt>track</tt>, that requester thread should call
+<tt>print_request(requester, track)</tt>.  A request is available to be
+serviced after <tt>print_request</tt> returns.
+
+<p>
+In the critical section where the service thread services a request
+for a given <tt>track</tt> by a given requester, the service thread
+should call <tt>print_service(requester, track)</tt>.  A request is
+considered to have been removed from the queue after
+<tt>print_service</tt> finishes.
+
+<p>
+<tt>print_request</tt> and <tt>print_service</tt> are declared in <a
+href=disk.h>disk.h</a> (do not modify this file) and included in <a
+href=libthread.o><tt>libthread.o</tt></a>.
+
+<p>
+Your submitted program should not generate any other output. You may
+find it helpful to add debugging output while testing your program,
+but it should be disabled or removed before submission.
+
+<h3 id="exampleio">3.3. Example input/output</h3>
+
+<p>
+Here is an example set of input files (disk.in0 - disk.in4).  We recommend
+you download these files, rather than copy-pasting the contents into
+an editor, since some editors create malformed files when you copy-paste
+(e.g., missing newline character for the last line).
+
+<table border=1>
+<thead>
+    <tr>
+        <th><a href=disk.in0>disk.in0</a></th>
+        <th><a href=disk.in1>disk.in1</a></th>
+        <th><a href=disk.in2>disk.in2</a></th>
+        <th><a href=disk.in3>disk.in3</a></th>
+        <th><a href=disk.in4>disk.in4</a></th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+	<td>785<br>53</td> <td>350<br>914</td> <td>827<br>567</td> <td>302<br>230</td> <td>631<br>11</td>
+    </tr>
+</tbody>
+</table>
+
+<p>
+Here is one of many possible correct outputs from running the disk
+scheduler with the following command (the final line of the output is
+produced by the thread library, not the disk scheduler):
+
+<pre>
+scheduler 3 disk.in0 disk.in1 disk.in2 disk.in3 disk.in4
+<hr>
+requester 0 track 785
+requester 1 track 350
+requester 2 track 827
+service requester 1 track 350
+requester 3 track 302
+service requester 3 track 302
+requester 4 track 631
+service requester 4 track 631
+requester 1 track 914
+service requester 0 track 785
+requester 3 track 230
+service requester 2 track 827
+requester 0 track 53
+service requester 1 track 914
+requester 4 track 11
+service requester 3 track 230
+requester 2 track 567
+service requester 0 track 53
+service requester 4 track 11
+service requester 2 track 567
+No runnable threads.  Exiting.
+<hr>
+</pre>
+
+<h3>3.4 Tips</h3>
+
+<p>
+The best way to write a correct solution is to think carefully about
+the structure of your program in the face of concurrency. In
+particular:
+
+<ul>
+<li> Every "action" in your program should be a thread body. There are
+(at least) two actions: make a disk request, and service a disk
+request. Every "actor" in your program should be an instantiated
+thread. There are (at least) N+1 actors: N requesters, and one
+servicer.</li>
+
+<li> Identify shared state, and assign a lock to (each group of) this
+state.</li>
+
+<li> Identify critical sections by noting regions within which
+invariants are broken or over which state dependencies exist. Acquire
+the appropriate lock before a critical section starts, release it
+after it ends. Consider using RAII, thinking carefully about the scope
+of such objects.</li>
+
+<li> Identify any ordering constraints: situations in which one thread
+needs another to perform some action before it can continue. Encode
+that action as a boolean expression over shared state, and assign a
+condition variable to each condition, associated with the appropraite
+lock.</li>
+
+<li> In the "waiting thread," wait on that condition variable inside a
+while loop that checks the boolean expression.</li>
+
+<li> In the "doing thread," call either signal or broadcast after
+performing the work for which the waiting thread is waiting. Call
+signal if (a) <strong>any single</strong> waiting thread can make
+progress AND (b) <strong>only one</strong> of them can. Call broadcast
+if EITHER (a) <strong>some</strong> waiting threads cannot make
+progress OR (b) <strong>more than one</strong> waiting thread
+can.</li>
+
+<li> The only statement inside the waiting loop (other than debugging
+print statements) should be <tt>wait</tt>.  No state should be changed
+inside a waiting loop or evaluating its boolean expression, nor should
+a thread call <tt>signal</tt> or <tt>broadcast</tt> within the loop.
+No thread should be affected by another thread calling <tt>wait</tt>.
+
+<li> Locks should be used only to enforce mutual exclusion.  Condition
+variables should be used only to enforce happens-before
+constraints. Do not use these mechanisms to try to influence the order
+in which things happen in any other way.
+
+<li> Favor simple, clear solutions over complex ones that might (or
+might not) be slightly faster. Make liberal use of the allowed
+libraries. Use <tt>assert</tt> whenever possible to make errors
+fail-stop.  Remember the elements of good style you have learned in
+prior courses: Do not duplicate code if a funciton can encapsulate it,
+and provide clean abstraction boundaries.
+</ul>
+
+<p>
+Of course, we will all make mistakes as we do this, so having a
+testing plan is important. There are three main approaches to testing
+a concurrent program.
+
+<p>
+<strong>Deterministic cases.</strong> Design both expected and edge
+cases for requesters making requests. Call <tt>cpu::boot</tt> with a
+specific deterministic seed. Verify the answer is correct. It can be
+helpful if you have a single-threaded program that checks output for
+correctness automatically by simulating the behavior of a "correct"
+disk scheduler given a sequence of requests.
+
+<p>
+<strong>Short non-determinsitic cases</strong> Create a small number
+of short, random test cases. Run them repeatedly,
+calling <tt>cpu::boot</tt> with non-determinisim enabled. Verify the
+output is correct for each run. For these test cases, it will be even
+more helpful to have a program that automatically verifies output;
+checking these by hand can be tedious. It can also be helpful to write
+a tool that can repeatedly invoke your non-deterministic solution on a
+particular input set, and perform the verification step
+automatically. Many people use shell scripts or python to create such
+a tool.
+
+<p>
+<strong>Long stress tests</strong> Create a VERY LARGE random test
+case--many thousands of requests is not too long. Run it repeatedly
+with <tt>cpu::boot</tt> set up to allow non-determinism. For these
+test cases it will be impossible to check the entire output by hand,
+so verifying it as correct requires another program. However, you
+might find segfaults, deadlocks, or other "hard" failures that
+illuminate errors in your program. You can can also do simpler things
+with simple tools: for example, you might use <tt>grep</tt>
+and <tt>wc</tt> to make sure that the right number of requests were
+issued and serviced for each thread. You might also
+use <tt>awk</tt>, <tt>sort</tt>, and <tt>uniq</tt> to check that each
+track number appears the correct number of times in the output
+compared to the number of times it appears in all of the inputs.
+
+<h2 id="logistics">4. Project logistics</h2>
+
+<p>
+Write your disk scheduler in C++17 on Linux.  Use the default CAEN
+compiler to compile your programs.  At the time of this writing, that
+is 8.5.0. Note that you may have a different default version
+via <tt>module load</tt> left over from a prior course.
+
+<!--<pre>
+module load gcc/9.1.0
+</pre>
+-->
+
+<!--
+<p>
+You should also set the <tt>LD_BIND_NOW</tt> environment variable to 1.
+This works around an apparent incompatibility between the thread library
+and the Linux dynamic linker.  Add the following line to your
+<tt>~/.profile</tt>:
+
+<pre>
+export LD_BIND_NOW=1
+</pre>
+-->
+
+<p>
+You may use any part of the standard C++ library, except the C++
+thread facilities.  You should not use any libraries other than the
+standard C++ library.  Your disk scheduler code may but need not be in
+multiple files.  Each file name must end
+with <tt>.cc</tt>, <tt>.cpp</tt>, or <tt>.h</tt> and must not start
+with <tt>test</tt> (filenames that start with
+<tt>test</tt> will denote test cases in later projects).
+
+<p>
+<strong>To avoid conflicting with the C++ thread facilities, do not
+specify "using namespace std;" in your program.</strong>
+
+<p>
+Here's a simple <a href=Makefile>Makefile</a> that shows how to compile a
+disk scheduler (adjust the file names in the Makefile to match your own
+program).
+
+<p>
+You are required to document your development process by having your
+Makefile run <tt><a href=autotag.sh>autotag.sh</a></tt> each time it
+compiles your disk scheduler (see Makefile above).  <tt><a
+href=autotag.sh>autotag.sh</a></tt> creates a git tag for a compilation,
+which helps the instructors better understand your development process.
+<tt><a href=autotag.sh>autotag.sh</a></tt> also configures your local git
+repo to include these tags when you run "<tt>git push</tt>".  To use it,
+download <tt><a href=autotag.sh>autotag.sh</a></tt> and set its execute
+permission bit (run "<tt>chmod +x autotag.sh</tt>").  If you have several
+local git repos, be sure to push to github from the same repo in which you
+compiled your disk scheduler.
+
+<p>
+When running <tt>gdb</tt>, you will probably find it useful to direct
+<tt>gdb</tt> to ignore <tt>SIGUSR1</tt> events (they are used by the
+project infrastructure).  To do this, use the following command
+in <tt>gdb</tt>:
+<pre>
+handle SIGUSR1 nostop noprint
+</pre>
+
+<p>
+We have created a private <a href="https://github.com/eecs482">github</a>
+repository for each student
+(<tt>eecs482/uniqname.1</tt>)
+Initialize
+your local repository by cloning the (empty) repository from github, e.g.,
+
+<pre>
+git clone git@github.com:eecs482/uniqname.1
+</pre>
+
+<h2 id="grading">5. Grading, auto-grading, and formatting</h2>
+
+<p>
+To help you validate your programs, your submissions will be graded
+automatically, and the results will be provided to you.  You may then
+continue to work on the project and re-submit.  The results from the
+auto-grader will not be very illuminating; they won't tell you where
+your problem is or give you the test inputs.  The main purpose of the
+auto-grader is to help you track progress towards completion.  The
+best way to debug your program is to generate your own test inputs,
+understand the constraints on correct answers for these inputs, and
+determine if your program's output obeys these constraints.  This is
+also one of the best ways to learn the concepts in the project.
+
+<p>
+You may submit your program as many times as you like, and all submissions
+will be graded and cataloged.  We will use your highest-scoring submission,
+with ties broken in favor of the later submission.  You must recompile and
+<tt>git push</tt> at least once between submissions.
+
+<p>
+The auto-grader will provide feedback for the first submission of each day,
+plus 3 bonus submissions over the duration of this project.  Bonus
+submissions will be used automatically--any submission you make after the
+first one of that day will use one of your bonus submissions.  After your 3
+bonus submissions are used up, the system will continue to provide feedback
+for the first submission of each day.  
+
+<p>
+Because you are writing a concurrent program, the auto-grader may return
+non-deterministic results.
+<!--In particular, test cases 4-7 are non-deterministic.-->
+
+<p>
+Because your programs will be auto-graded, you must be careful to follow the
+exact rules in the project description.  In particular:
+
+<ul>
+
+<li>Your program should print only the two items specified in
+<a href="#output">Section 3.2</a>.
+
+<li>Your program should expect several command-line
+arguments, with the first being <tt>max_disk_queue</tt> and the others
+specifying the list of input files for the requester threads.
+
+<li>Do not modify or rename the header files provided in this handout.
+
+</ul>
+
+<!--
+<p>
+In addition to the auto-grader's evaluation of your program's correctness, a
+human grader will evaluate your program on issues such as the clarity and
+completeness of your documentation, coding style, the efficiency, brevity, and
+understandability of your code, etc..  Your final score will be the product of
+the hand-graded score (between 1-1.12) and the auto-grader score.
+-->
+
+<h2 id="submission">6. Turning in the project</h2>
+
+<p>
+<!--<a href=../submit.php?1>Submit</a> the following files for your disk scheduler:
+-->
+You will submit the following files for your disk scheduler:
+
+
+<ul>
+
+<li>C++ files for your disk scheduler.  File names should end in
+<tt>.cc</tt>, <tt>.cpp</tt>, or <tt>.h</tt> and must not start with
+<tt>test</tt>.  Do not submit the files provided in this handout.
+
+</ul>
+
+There is a strict deadline for full credit on the project: Midnight
+EDT on the day the project is due. Students who have obtained less
+than 80% at that point may continue working on the project for up to
+one week to improve their score to a maximum of 80%, with additional
+help from the course staff.
+
+<!-- <p> -->
+<!-- The official time of submission for your project will be the time of your -->
+<!-- last submission.  Submissions after the due date will automatically use up -->
+<!-- your late days; if you have no late days left, late submissions will not be -->
+<!-- counted. -->
+
+<h2 id="files">7. Files included in this handout (<a href=handout.zip>zip file</a>)
+</h2>
+
+<ul>
+<li><a href=cpu.h><tt>cpu.h</tt></a>
+<li><a href=cv.h><tt>cv.h</tt></a>
+<li><a href=mutex.h><tt>mutex.h</tt></a>
+<li><a href=semaphore.h><tt>semaphore.h</tt></a>
+<li><a href=thread.h><tt>thread.h</tt></a>
+<li><a href=libthread.o><tt>libthread.o</tt></a>
+<li><a href=disk.h><tt>disk.h</tt></a>
+<li><a href=disk.in0><tt>disk.in0</tt></a>
+<li><a href=disk.in1><tt>disk.in1</tt></a>
+<li><a href=disk.in2><tt>disk.in2</tt></a>
+<li><a href=disk.in3><tt>disk.in3</tt></a>
+<li><a href=disk.in4><tt>disk.in4</tt></a>
+<li><a href=autotag.sh><tt>autotag.sh</tt></a>
+<li><a href=Makefile><tt>Makefile</tt></a>
+</ul>
+
+<h2 id="platforms">8. Experimental platforms</h2>
+
+<p>
+The files provided in this handout were compiled on RHEL 8.  They should
+work on most other Linux distributions (e.g., Ubuntu) and on Windows
+Subsystem for Linux (WSL), but these are not officially supported.
+
+<p>
+We also provide a version of the infrastructure for students
+who want to develop on MacOS (10.14 or later, including experimental
+support for ARM-based Macs).
+<!--
+The infrastructure works around a bug in
+MacOS's low-level context functions (which are deprecated) and there may be
+other bugs lurking, so use this at your own risk.
+-->
+If you are developing on MacOS:
+
+<ul>
+<li>Use <tt><a href="macos/libthread_macos.o">libthread_macos.o</a></tt> instead of
+<tt>libthread.o</tt>.
+
+<li> Add <tt>-D_XOPEN_SOURCE</tt> to the compilation flags.
+
+<!--
+(note the different suffix).
+
+<li>If you run the project in a debugger, you'll need to ignore SIGUSR1
+signals by issuing the following debugger command:
+
+<pre>
+process handle SIGUSR1 -n false -p true -s false
+</pre>
+
+To issue this command automatically, add it to <tt>.lldbinit</tt> or create
+a symbolic breakpoint on <tt>main</tt> and give it a Debugger Command
+action that continues automatically after evaluating the actions box.
+-->
+
+</ul>
+
+<script src="../assets/js/primer_spec_plugin.min.js"></script>
+</body>
+</html>

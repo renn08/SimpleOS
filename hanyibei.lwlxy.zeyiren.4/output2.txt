@@ -1,0 +1,24 @@
+start main
+becore Read in root node
+
+@@@ #1 disk_readblock: block 0
+Read in root node
+
+@@@ #2 disk_readblock: block 2
+
+@@@ #3 disk_readblock: block 1
+here?
+
+@@@ #4 disk_readblock: block 127
+here?
+
+@@@ #5 disk_readblock: block 252
+here?
+
+@@@ #6 disk_readblock: block 377
+here?
+
+@@@ #7 disk_readblock: block 502
+here?
+
+@@@ #8 disk_readblock: block 627

@@ -1,0 +1,16 @@
+#
+# This file is used by various scripts.  The "require user" line
+# has different groups of users: %staff, %4credit, %6credit, %wait, %other.
+# %wait and %other students can submit their picture/nickname, github ID,
+# Project 1, and (if in the groups.<n> file) Projects 2-4.
+#
+# I used to have separate lines for each group, but Apache generated lots of
+# spurious warnings in /var/log/httpd/ssl_error_log
+#
+
+authtype shibboleth
+shibrequiresession on
+ShibExportAssertion On
+AuthGroupFile /home/eecs482/aclgroups
+#Require group staff 4credit 6credit other
+Require group staff

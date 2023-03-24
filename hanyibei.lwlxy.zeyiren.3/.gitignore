@@ -1,0 +1,12 @@
+./.idea
+Makefile
+./.vscode
+./app.cpp
+*.o
+app
+Makefile
+output
+pager
+testFork*
+testProcess*
+test_evict*

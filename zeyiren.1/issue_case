@@ -1,0 +1,842 @@
+./scheduler 19 test/0 test/1 test/2 test/3 test/4 test/5 test/6 test/7 test/8 test/9 test/10 test/11 test/12
+request_list: 905 759 563 156 50 753 416 663 388 660 966 52 307 849 441 380 464 345 474 202 268 963 593 99 653
+839 536 259 834 168 889 797 432 901 991 691 559 298 145 141 435 816 794 852 518 240 368 543 125 856 326 153 838 673 610 315 437 443
+117
+677 214 256 206 699 690 986 144 878 315 614 611 130 530 648 676 981 606 866 866 304
+571 512 742 18 895 489 476
+892 758 592
+686 220 219 454 122 889 962 99 284 180 520 220 917 790 651 669 415 979 933 591 779 158 732 677 314 304 728 335 442 317 142 132
+315 801 775 243 164 536 433 895 194 889 519 607 230 601 599 871 808 974 853 165 684 557 610 291 312 669 895 998 551 790
+606 996 489 616 409 528 406 109 231 8 2 357 649 858 642 425 192 104 876 439 448 198 174 457 244 285 370 882 260 687 558 280 317 157 34 404 811 278 14 681 539 277 70 509 568 542 685 17
+340 513 706 157 464 304 150 526 672 314 353
+848 560 332 748 186 861
+630 138 156 425 441 848 350 954 311 669 850 138 855 633 471 153 21 8 684 489 446 343 536 331 890 585 480 544 16 869 62 40 379 110 479 831 54
+349 792 140 544 322 507 913 712
+requester_state: 0 0 0 0 0 0 0 0 0 0 0 0 0
+queue_length: 13 server_list: 938 582 300 197 94 173 628 657 160 571 443 341 668
+in
+requester 0 track 938
+in
+in
+requester 1 track 582
+in
+in
+requester 2 track 300
+in
+in
+requester 3 track 197
+in
+in
+requester 5 track 94
+in
+in
+requester 4 track 173
+in
+in
+requester 6 track 628
+in
+in
+requester 7 track 657
+in
+in
+requester 8 track 160
+in
+in
+requester 9 track 571
+in
+in
+requester 10 track 443
+in
+in
+requester 12 track 341
+in
+in
+requester 11 track 668
+in
+service requester 0 track 938
+requester 0 track 905
+in
+service requester 1 track 582
+requester 1 track 839
+in
+service requester 2 track 300
+requester 2 track 117
+service requester 3 track 197
+requester 3 track 677
+in
+service requester 5 track 94
+requester 5 track 892
+in
+service requester 4 track 173
+requester 4 track 571
+in
+service requester 6 track 628
+requester 6 track 686
+in
+service requester 7 track 657
+requester 7 track 315
+in
+service requester 8 track 160
+requester 8 track 606
+in
+service requester 9 track 571
+requester 9 track 340
+in
+service requester 10 track 443
+requester 10 track 848
+in
+service requester 12 track 341
+requester 12 track 349
+in
+service requester 11 track 668
+requester 11 track 630
+in
+service requester 0 track 905
+requester 0 track 759
+in
+service requester 1 track 839
+requester 1 track 536
+in
+service requester 2 track 117
+service requester 3 track 677
+requester 3 track 214
+in
+service requester 5 track 892
+requester 5 track 758
+in
+service requester 4 track 571
+requester 4 track 512
+in
+service requester 6 track 686
+requester 6 track 220
+in
+service requester 7 track 315
+requester 7 track 801
+in
+service requester 8 track 606
+requester 8 track 996
+in
+service requester 9 track 340
+requester 9 track 513
+in
+service requester 10 track 848
+requester 10 track 560
+in
+service requester 12 track 349
+requester 12 track 792
+in
+service requester 11 track 630
+requester 11 track 138
+in
+service requester 0 track 759
+requester 0 track 563
+in
+service requester 1 track 536
+requester 1 track 259
+in
+service requester 3 track 214
+requester 3 track 256
+in
+service requester 5 track 758
+requester 5 track 592
+service requester 4 track 512
+requester 4 track 742
+in
+service requester 6 track 220
+requester 6 track 219
+in
+service requester 7 track 801
+requester 7 track 775
+in
+service requester 8 track 996
+requester 8 track 489
+in
+service requester 9 track 513
+requester 9 track 706
+in
+service requester 10 track 560
+requester 10 track 332
+in
+service requester 12 track 792
+requester 12 track 140
+in
+service requester 11 track 138
+requester 11 track 156
+in
+service requester 0 track 563
+requester 0 track 156
+in
+service requester 1 track 259
+requester 1 track 834
+in
+service requester 3 track 256
+requester 3 track 206
+in
+service requester 5 track 592
+service requester 4 track 742
+requester 4 track 18
+in
+service requester 6 track 219
+requester 6 track 454
+in
+service requester 7 track 775
+requester 7 track 243
+in
+service requester 8 track 489
+requester 8 track 616
+in
+service requester 9 track 706
+requester 9 track 157
+in
+service requester 10 track 332
+requester 10 track 748
+in
+service requester 12 track 140
+requester 12 track 544
+in
+service requester 11 track 156
+requester 11 track 425
+in
+service requester 0 track 156
+requester 0 track 50
+in
+service requester 1 track 834
+requester 1 track 168
+in
+service requester 3 track 206
+requester 3 track 699
+in
+service requester 4 track 18
+requester 4 track 895
+in
+service requester 6 track 454
+requester 6 track 122
+in
+service requester 7 track 243
+requester 7 track 164
+in
+service requester 8 track 616
+requester 8 track 409
+in
+service requester 9 track 157
+requester 9 track 464
+in
+service requester 10 track 748
+requester 10 track 186
+in
+service requester 12 track 544
+requester 12 track 322
+in
+service requester 11 track 425
+requester 11 track 441
+in
+service requester 0 track 50
+requester 0 track 753
+in
+service requester 1 track 168
+requester 1 track 889
+in
+service requester 3 track 699
+requester 3 track 690
+in
+service requester 4 track 895
+requester 4 track 489
+in
+service requester 6 track 122
+requester 6 track 889
+in
+service requester 7 track 164
+requester 7 track 536
+in
+service requester 8 track 409
+requester 8 track 528
+in
+service requester 9 track 464
+requester 9 track 304
+in
+service requester 10 track 186
+requester 10 track 861
+service requester 12 track 322
+requester 12 track 507
+in
+service requester 11 track 441
+requester 11 track 848
+in
+service requester 0 track 753
+requester 0 track 416
+in
+service requester 1 track 889
+requester 1 track 797
+in
+service requester 3 track 690
+requester 3 track 986
+in
+service requester 4 track 489
+requester 4 track 476
+service requester 6 track 889
+requester 6 track 962
+in
+service requester 7 track 536
+requester 7 track 433
+in
+service requester 8 track 528
+requester 8 track 406
+in
+service requester 9 track 304
+requester 9 track 150
+in
+service requester 10 track 861
+service requester 12 track 507
+requester 12 track 913
+in
+service requester 11 track 848
+requester 11 track 350
+in
+service requester 0 track 416
+requester 0 track 663
+in
+service requester 1 track 797
+requester 1 track 432
+in
+service requester 3 track 986
+requester 3 track 144
+in
+service requester 4 track 476
+service requester 6 track 962
+requester 6 track 99
+in
+service requester 7 track 433
+requester 7 track 895
+in
+service requester 8 track 406
+requester 8 track 109
+in
+service requester 9 track 150
+requester 9 track 526
+in
+service requester 12 track 913
+requester 12 track 712
+service requester 11 track 350
+requester 11 track 954
+in
+service requester 0 track 663
+requester 0 track 388
+in
+service requester 1 track 432
+requester 1 track 901
+in
+service requester 3 track 144
+requester 3 track 878
+in
+service requester 6 track 99
+requester 6 track 284
+in
+service requester 7 track 895
+requester 7 track 194
+in
+service requester 8 track 109
+requester 8 track 231
+in
+service requester 9 track 526
+requester 9 track 672
+in
+service requester 12 track 712
+service requester 11 track 954
+requester 11 track 311
+in
+service requester 0 track 388
+requester 0 track 660
+in
+service requester 1 track 901
+requester 1 track 991
+in
+service requester 3 track 878
+requester 3 track 315
+in
+service requester 6 track 284
+requester 6 track 180
+in
+service requester 7 track 194
+requester 7 track 889
+in
+service requester 8 track 231
+requester 8 track 8
+in
+service requester 9 track 672
+requester 9 track 314
+in
+service requester 11 track 311
+requester 11 track 669
+in
+service requester 0 track 660
+requester 0 track 966
+in
+service requester 1 track 991
+requester 1 track 691
+in
+service requester 3 track 315
+requester 3 track 614
+in
+service requester 6 track 180
+requester 6 track 520
+in
+service requester 7 track 889
+requester 7 track 519
+in
+service requester 8 track 8
+requester 8 track 2
+in
+service requester 9 track 314
+requester 9 track 353
+service requester 11 track 669
+requester 11 track 850
+in
+service requester 0 track 966
+requester 0 track 52
+in
+service requester 1 track 691
+requester 1 track 559
+in
+service requester 3 track 614
+requester 3 track 611
+in
+service requester 6 track 520
+requester 6 track 220
+in
+service requester 7 track 519
+requester 7 track 607
+in
+service requester 8 track 2
+requester 8 track 357
+in
+service requester 9 track 353
+service requester 11 track 850
+requester 11 track 138
+in
+service requester 0 track 52
+requester 0 track 307
+in
+service requester 1 track 559
+requester 1 track 298
+in
+service requester 3 track 611
+requester 3 track 130
+in
+service requester 6 track 220
+requester 6 track 917
+in
+service requester 7 track 607
+requester 7 track 230
+in
+service requester 8 track 357
+requester 8 track 649
+in
+service requester 11 track 138
+requester 11 track 855
+in
+service requester 0 track 307
+requester 0 track 849
+in
+service requester 1 track 298
+requester 1 track 145
+in
+service requester 3 track 130
+requester 3 track 530
+in
+service requester 6 track 917
+requester 6 track 790
+in
+service requester 7 track 230
+requester 7 track 601
+in
+service requester 8 track 649
+requester 8 track 858
+in
+service requester 11 track 855
+requester 11 track 633
+in
+service requester 0 track 849
+requester 0 track 441
+in
+service requester 1 track 145
+requester 1 track 141
+in
+service requester 3 track 530
+requester 3 track 648
+in
+service requester 6 track 790
+requester 6 track 651
+in
+service requester 7 track 601
+requester 7 track 599
+in
+service requester 8 track 858
+requester 8 track 642
+in
+service requester 11 track 633
+requester 11 track 471
+in
+service requester 0 track 441
+requester 0 track 380
+in
+service requester 1 track 141
+requester 1 track 435
+in
+service requester 3 track 648
+requester 3 track 676
+in
+service requester 6 track 651
+requester 6 track 669
+in
+service requester 7 track 599
+requester 7 track 871
+in
+service requester 8 track 642
+requester 8 track 425
+in
+service requester 11 track 471
+requester 11 track 153
+in
+service requester 0 track 380
+requester 0 track 464
+in
+service requester 1 track 435
+requester 1 track 816
+in
+service requester 3 track 676
+requester 3 track 981
+in
+service requester 6 track 669
+requester 6 track 415
+in
+service requester 7 track 871
+requester 7 track 808
+in
+service requester 8 track 425
+requester 8 track 192
+in
+service requester 11 track 153
+requester 11 track 21
+in
+service requester 0 track 464
+requester 0 track 345
+in
+service requester 1 track 816
+requester 1 track 794
+in
+service requester 3 track 981
+requester 3 track 606
+in
+service requester 6 track 415
+requester 6 track 979
+in
+service requester 7 track 808
+requester 7 track 974
+in
+service requester 8 track 192
+requester 8 track 104
+in
+service requester 11 track 21
+requester 11 track 8
+in
+service requester 0 track 345
+requester 0 track 474
+in
+service requester 1 track 794
+requester 1 track 852
+in
+service requester 3 track 606
+requester 3 track 866
+in
+service requester 6 track 979
+requester 6 track 933
+in
+service requester 7 track 974
+requester 7 track 853
+in
+service requester 8 track 104
+requester 8 track 876
+in
+service requester 11 track 8
+requester 11 track 684
+in
+service requester 0 track 474
+requester 0 track 202
+in
+service requester 1 track 852
+requester 1 track 518
+in
+service requester 3 track 866
+requester 3 track 866
+in
+service requester 6 track 933
+requester 6 track 591
+in
+service requester 7 track 853
+requester 7 track 165
+in
+service requester 8 track 876
+requester 8 track 439
+in
+service requester 11 track 684
+requester 11 track 489
+in
+service requester 0 track 202
+requester 0 track 268
+in
+service requester 1 track 518
+requester 1 track 240
+in
+service requester 3 track 866
+requester 3 track 304
+service requester 6 track 591
+requester 6 track 779
+in
+service requester 7 track 165
+requester 7 track 684
+in
+service requester 8 track 439
+requester 8 track 448
+in
+service requester 11 track 489
+requester 11 track 446
+in
+service requester 0 track 268
+requester 0 track 963
+in
+service requester 1 track 240
+requester 1 track 368
+in
+service requester 3 track 304
+service requester 6 track 779
+requester 6 track 158
+in
+service requester 7 track 684
+requester 7 track 557
+in
+service requester 8 track 448
+requester 8 track 198
+in
+service requester 11 track 446
+requester 11 track 343
+in
+service requester 0 track 963
+requester 0 track 593
+in
+service requester 1 track 368
+requester 1 track 543
+in
+service requester 6 track 158
+requester 6 track 732
+in
+service requester 7 track 557
+requester 7 track 610
+in
+service requester 8 track 198
+requester 8 track 174
+in
+service requester 11 track 343
+requester 11 track 536
+in
+service requester 0 track 593
+requester 0 track 99
+in
+service requester 1 track 543
+requester 1 track 125
+in
+service requester 6 track 732
+requester 6 track 677
+in
+service requester 7 track 610
+requester 7 track 291
+in
+service requester 8 track 174
+requester 8 track 457
+in
+service requester 11 track 536
+requester 11 track 331
+in
+service requester 0 track 99
+requester 0 track 653
+service requester 1 track 125
+requester 1 track 856
+in
+service requester 6 track 677
+requester 6 track 314
+in
+service requester 7 track 291
+requester 7 track 312
+in
+service requester 8 track 457
+requester 8 track 244
+in
+service requester 11 track 331
+requester 11 track 890
+in
+service requester 0 track 653
+service requester 1 track 856
+requester 1 track 326
+in
+service requester 6 track 314
+requester 6 track 304
+in
+service requester 7 track 312
+requester 7 track 669
+in
+service requester 8 track 244
+requester 8 track 285
+in
+service requester 11 track 890
+requester 11 track 585
+in
+service requester 1 track 326
+requester 1 track 153
+in
+service requester 6 track 304
+requester 6 track 728
+in
+service requester 7 track 669
+requester 7 track 895
+in
+service requester 8 track 285
+requester 8 track 370
+in
+service requester 11 track 585
+requester 11 track 480
+in
+service requester 1 track 153
+requester 1 track 838
+in
+service requester 6 track 728
+requester 6 track 335
+in
+service requester 7 track 895
+requester 7 track 998
+in
+service requester 8 track 370
+requester 8 track 882
+in
+service requester 11 track 480
+requester 11 track 544
+in
+service requester 1 track 838
+requester 1 track 673
+in
+service requester 6 track 335
+requester 6 track 442
+in
+service requester 7 track 998
+requester 7 track 551
+in
+service requester 8 track 882
+requester 8 track 260
+in
+service requester 11 track 544
+requester 11 track 16
+in
+service requester 1 track 673
+requester 1 track 610
+in
+service requester 6 track 442
+requester 6 track 317
+in
+service requester 7 track 551
+requester 7 track 790
+service requester 8 track 260
+requester 8 track 687
+in
+service requester 11 track 16
+requester 11 track 869
+in
+service requester 1 track 610
+requester 1 track 315
+in
+service requester 6 track 317
+requester 6 track 142
+in
+service requester 7 track 790
+service requester 8 track 687
+requester 8 track 558
+in
+service requester 11 track 869
+requester 11 track 62
+in
+service requester 1 track 315
+requester 1 track 437
+in
+service requester 6 track 142
+requester 6 track 132
+service requester 8 track 558
+requester 8 track 280
+in
+service requester 11 track 62
+requester 11 track 40
+in
+service requester 1 track 437
+requester 1 track 443
+service requester 6 track 132
+service requester 8 track 280
+requester 8 track 317
+in
+service requester 11 track 40
+requester 11 track 379
+in
+service requester 1 track 443
+service requester 8 track 317
+requester 8 track 157
+in
+service requester 11 track 379
+requester 11 track 110
+in
+service requester 8 track 157
+requester 8 track 34
+in
+service requester 11 track 110
+requester 11 track 479
+in
+service requester 8 track 34
+requester 8 track 404
+in
+service requester 11 track 479
+requester 11 track 831
+in
+service requester 8 track 404
+requester 8 track 811
+in
+service requester 11 track 831
+requester 11 track 54
+service requester 8 track 811
+requester 8 track 278
+in
+service requester 11 track 54
+service requester 8 track 278
+requester 8 track 14
+in
+service requester 8 track 14
+requester 8 track 681
+in
+service requester 8 track 681
+requester 8 track 539
+in
+service requester 8 track 539
+requester 8 track 277
+in
+service requester 8 track 277
+requester 8 track 70
+in
+service requester 8 track 70
+requester 8 track 509
+in
+service requester 8 track 509
+requester 8 track 568
+in
+service requester 8 track 568
+requester 8 track 542
+in
+service requester 8 track 542
+requester 8 track 685
+in
+service requester 8 track 685
+requester 8 track 17
+service requester 8 track 17
+No runnable threads.  Exiting.

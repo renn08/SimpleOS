@@ -1,0 +1,9 @@
+./.idea
+Makefile
+./.vscode
+./app.cpp
+*.o
+test2.cpp
+test3*
+test4*
+app

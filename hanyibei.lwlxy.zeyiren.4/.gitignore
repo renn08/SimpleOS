@@ -1,0 +1,9 @@
+Makefile
+libfs_client_macos.o
+libfs_client.o
+libfs_server_macos.o
+libfs_server.o
+showfs
+showfs_macos
+.DS_Store
+.idea

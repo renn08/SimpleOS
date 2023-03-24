@@ -1,0 +1,25 @@
+write block in dir
+delete non-empty dir
+write to blocksize+2
+read non existing block
+different user
+
+create duplicte name
+delete root
+invalid path error *4
+read dir
+write dir
+create with parentpath as a file
+
+writeblock full
+disk fullcreate parent full
+
+no extra spaces, all fields non-empty, numbers in canonical base-10 form with no leading zeroes.
+
+
+void send_bytes(int sock, char * buf, int len) {
+int sent = 0;
+do {
+sent += send(sock, buf + sent, len - sent, 0);
+} while (sent < len);
+}

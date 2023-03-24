@@ -1,0 +1,26 @@
+Parent start
+ Child 1 get lock 0
+Child 1 get num 1
+Child 1 yield 1
+Child 3 get lock 1
+Child 3 get num 4
+Child 3 yield 4
+Child 4 get lock 4
+Child 1 yield back 4
+Child 1 get num 3
+Child 1 get unlock 3
+Child 3 yield back3
+Child 3 get num 0
+Child 3 get unlock 0
+Child thread created
+Child 1 joined
+Child 4 get num 3
+Child 4 yield 3
+Child fake parent3
+after join
+Child 4 yield back3
+Child 4 get num 0
+Child 4 get unlock 0
+Child 2 joined
+Parent finish
+All CPUs suspended.  Exiting.

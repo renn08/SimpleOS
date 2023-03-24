@@ -1,0 +1,31 @@
+write
+check write_enable
+check valid & resident
+	00 invalid, return -1
+    set referenced
+	10 update clock queue (include evict and update physical mem), if is swap backed, read from swap back block, if is file backed, read from file backed block, if fail return -1. set 11, return 0 
+	11 set dirty
+		// if page is file backed then should not be dirty? assert complains
+        if is file backed directly write to file 
+        if is swap backed set dirty
+        return 0
+			
+
+read
+check read_enable
+check valid & resident
+	00 invalid, return -1
+    set referenced
+	10 (evict a page if arena is full, othersize vm_map a page?) set 11, return 0
+	11 caused by readenable = 0 and referenced = 0, set referenced = 1 and readenable = 1 success	return 0
+
+evict
+delete in clock queue
+if is file backed, should not be dirty assert
+if is swap backed, if is the dirty, write to disk.
+
+update clock queue
+if the physical page is not full, no victim needed, enqueue and set referenced
+
+clock queue
+
